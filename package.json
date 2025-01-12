@@ -1,0 +1,37 @@
+{
+    "name": "crud",
+    "version": "1.0.0",
+    "description": "simple crud JS",
+    "main": "server.js",
+    "scripts": {
+        "start": "cross-env NODE_ENV=production node server.js",
+        "dev": "nodemon --config nodemon.json",
+        "test": "NODE_ENV=test node server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/mrakotomanana/crud-js.git"
+    },
+    "keywords": [
+        "html",
+        "js",
+        "css",
+        "expressJS",
+        "nodeJS"
+    ],
+    "author": "Michel",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/mrakotomanana/crud-js/issues"
+    },
+    "homepage": "https://github.com/mrakotomanana/crud-js#readme",
+    "dependencies": {
+        "dotenv": "^16.4.7",
+        "ejs": "^3.1.10",
+        "express": "^4.21.2"
+    },
+    "devDependencies": {
+        "cross-env": "^7.0.3",
+        "nodemon": "^3.1.9"
+    }
+}
