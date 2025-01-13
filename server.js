@@ -14,15 +14,21 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
     res.locals.title = 'To Do List';
+    res.locals.css = 'main';
     next(); 
 });
 
+
 app.get('/', (req, res) => {
-    res.render('index', {title: 'Accueil ToDo'});
+    res.render('index', {title: 'Accueil ToDo',});
 });
 
 app.get('/add', (req, res) => {
-    res.render('pages/add', {title: 'Ajouter des ToDo'});
+    res.render('pages/add', {title: 'Ajouter des ToDo', css: 'add'});
+});
+
+app.get('/list', (req, res) => {
+    res.render('pages/list', {title: 'View ToDo', css: 'list'});
 });
 
 

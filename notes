@@ -1,0 +1,119 @@
+DOMPurify
+iti <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script> atao ao @page
+afka atao test @iti 
+// Une chaîne HTML avec un script dangereux
+const dirtyHTML = `
+  <div>
+    <h1>Hello, World!</h1>
+    <script>alert('Danger!');</script>
+  </div>
+`;
+
+<script type="text/javascript" src="src/purify.js"></script>
+
+// Désinfecter avec DOMPurify
+const cleanHTML = DOMPurify.sanitize(dirtyHTML);
+
+// Afficher le HTML désinfecté
+console.log(cleanHTML);
+
+<div id="output"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script>
+<script>
+  const dirtyHTML = `
+    <div>
+      <h1>Bienvenue !</h1>
+      <script>alert('Malveillant');</script>
+    </div>
+  `;
+
+  // Désinfecter le HTML
+  const cleanHTML = DOMPurify.sanitize(dirtyHTML);
+
+  // Insérer dans le DOM
+  document.getElementById('output').innerHTML = cleanHTML;
+</script>
+
+
+na mampiasa
+npm install dompurify
+import DOMPurify from 'dompurify';
+
+const config = { ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a'] }; // configuration DOMPurify
+const config = { ALLOWED_ATTR: ['href', 'target'] };
+
+const cleanHTML = DOMPurify.sanitize('<b>Hello</b> <script>Malicious</script>', config);
+console.log(cleanHTML); // "<b>Hello</b>"
+
+<form id="commentForm">
+    <textarea id="userInput" placeholder="Votre commentaire"></textarea>
+    <button type="submit">Soumettre</button>
+  </form>
+  <div id="comments"></div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script>
+  <script>
+    document.getElementById('commentForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const userInput = document.getElementById('userInput').value;
+  
+      // Nettoyer l'entrée utilisateur
+      const cleanComment = DOMPurify.sanitize(userInput);
+  
+      // Ajouter au DOM
+      const commentsDiv = document.getElementById('comments');
+      const comment = document.createElement('div');
+      comment.innerHTML = cleanComment;
+      commentsDiv.appendChild(comment);
+  
+      // Réinitialiser le formulaire
+      document.getElementById('userInput').value = '';
+    });
+  </script>
+
+npm install jsdom
+DOMPurify dépend d'un environnement DOM pour fonctionner (comme celui fourni par les navigateurs). Dans Node.js, le DOM n'est pas disponible nativement.
+
+jsdom simule un environnement DOM côté serveur, permettant ainsi à DOMPurify de désinfecter le contenu HTML même en dehors d'un navigateur.
+
+
+const { JSDOM } = require('jsdom'); // Importer jsdom
+const createDOMPurify = require('dompurify'); // Importer DOMPurify
+
+// Créer un environnement DOM côté serveur
+const window = new JSDOM('').window;
+
+// Initialiser DOMPurify avec l'environnement DOM de jsdom
+const DOMPurify = createDOMPurify(window);
+
+// Désinfecter une chaîne HTML
+const dirtyHTML = `
+  <div>
+    <h1>Hello, World!</h1>
+    <script>alert('Malicious!');</script>
+  </div>
+`;
+
+const cleanHTML = DOMPurify.sanitize(dirtyHTML);
+
+console.log(cleanHTML);
+// Résultat : "<div><h1>Hello, World!</h1></div>"
+
+
+
+  const cors = require('cors');
+  app.use(cors({
+    origin: 'https://domain.com',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }));
+  
+  app.options(route, cors());
+
+  bcrypt pour la sécurisation password
+
+atao redirection fon ra vao tsi https mb iarovana ni app
+app.use((req, res, next)=>{
+    if(req.)
+})

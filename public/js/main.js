@@ -1,3 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Page chargée avec succès !');
+    console.log('Page index chargée avec succès !');
   });
+
+  
