@@ -117,3 +117,285 @@ atao redirection fon ra vao tsi https mb iarovana ni app
 app.use((req, res, next)=>{
     if(req.)
 })
+
+
+
+
+document.addEventListener('DOMContentLoaded', async function(){
+  console.log('Page List chargée avec succès !')
+
+  const todosContainer = document.querySelector('#todos')
+
+  // Fonction pour charger les tâches depuis l'API
+  const loadTodos = async function(todos) {
+  
+    todosContainer.innerHTML = '' // Réinitialiser la liste
+
+    if (todos) {
+      todos.forEach(todo => {
+        const item = document.createElement('li')
+        item.className = `items ${todo.checked ? 'checked' : ''}`
+        item.dataset.id = todo.id // Stocker l'ID de la tâche
+        item.textContent = todo.text
+
+        if (!todo.checked) {
+          const span = document.createElement('span')
+          const btnModify = document.createElement('button')
+          const btnDeleted = document.createElement('button')
+
+          btnModify.textContent = 'Modify'
+          btnDeleted.textContent = 'Delete'
+
+          btnModify.className = 'btn modify'
+          btnDeleted.className = 'btn deleted'
+
+          span.appendChild(btnModify)
+          span.appendChild(btnDeleted)
+          item.appendChild(span)
+
+          // Gestion des événements des boutons
+          btnModify.addEventListener('click', () => modifyTodo(todo.id))
+          btnDeleted.addEventListener('click', () => deleteTodo(todo.id))
+        }
+        todosContainer.appendChild(item)
+      })
+    }else{
+        const item = document.createElement('li');
+        item.className = `items`;
+        item.textContent = 'Aucune donnée trouvée.';
+        todosContainer.appendChild(item);
+    }
+  }
+
+  // Fonction pour modifier une tâche
+  const modifyTodo = async function(id){
+    const newText = prompt('Modifier la tâche :')
+    if (newText) {
+      await fetch(`/api/todos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: newText })
+      })
+      loadTodos() // Recharger la liste
+    }
+  }
+
+  // Fonction pour supprimer une tâche
+  const deleteTodo = async function(id){
+    if (confirm('Voulez-vous vraiment supprimer cette tâche ?')) {
+      await fetch(`/api/todos/${id}`, { method: 'DELETE' })
+      loadTodos() // Recharger la liste
+    }
+  }
+
+  // Charger les tâches initiales
+  loadTodos()
+})
+
+
+<h1>List Todo</h1>
+
+<ul id="todos">
+    <li class="items checked">Hit the gym</li>
+    <li class="checked items">Pay bills</li>
+    <li class="items">Meet George</li>
+    <li class="items">Buy eggs</li>
+    <li class="items">Read a book</li>
+    <li class="items">Organize office</li>
+</ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script>
+</div >
+
+
+const listItems  = document.querySelectorAll('#todos > li');
+
+  listItems.forEach(item => {
+    console.info(item.classList.value);
+    if (!item.classList.contains('checked')) {
+      var span = document.createElement("span");
+      var btnModify = document.createElement("button");
+      var btnDeleted = document.createElement("button");
+      var txtModify = document.createTextNode("Modify");
+      var txtDeleted = document.createTextNode("Delete");
+      btnModify.className = "btn modify";
+      btnModify.appendChild(txtModify);
+      span.appendChild(btnModify);
+      btnDeleted.className = "btn deleted";
+      btnDeleted.appendChild(txtDeleted);
+      span.appendChild(btnDeleted);
+      item.appendChild(span);
+    }
+  }
+);
+
+
+<% if (todos.length > 0) { %>
+  <ul id="todos">
+      <% todos.forEach(todo => { %>
+          <li class="items <%= todo.checked ? 'checked' : '' %>">
+              <%= todo.text %>
+          </li>
+          <% }) %>
+  </ul>
+  <% } else { %>
+      <p>
+          Aucun ToDo trouvé. Ajoutez-en un pour commencer !
+          <a href="/add">Add</a>
+      </p>
+      <% } %>
+
+
+       // if (confirm('Voulez-vous vraiment supprimer cette tâche ?')) {
+    //   let url = ``;
+    //   window.location.href = url; // Redirige
+    //   // await fetch(`/api/todos/${id}`, { method: 'DELETE' })
+    // }
+    // const newText = prompt('Modifier la tâche :')
+    // if (newText) {
+    //   await fetch(`/api/todos/${id}`, {
+    //     method: 'PUT',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ text: newText })
+    //   })
+    //   loadTodos() // Recharger la liste
+    // }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Page List chargée avec succès !');
+    
+      const todosContainer = document.querySelector('#todos')
+    
+      const modalModify = document.getElementById('modalModify');
+      const modalTitleModify = document.getElementById('modal-title-modify');
+      const todoTextInput = document.getElementById('todo-text');
+      const todoCheckedInput = document.getElementById('todo-checked');
+      const modalSaveModify = document.getElementById('modal-save-modify');
+      const modalCancel = document.getElementById('modal-cancel');
+      const closeModal = document.querySelector('.close');
+    
+      let currentTodoId = null;
+    
+      const openModifyModal = (todo) => {
+        modalModify.style.display = 'block';
+        modalTitleModify.textContent = 'Modify ToDo';
+        currentTodoId = todo._id;
+        todoTextInput.value = todo.text;
+        todoCheckedInput.checked = todo.checked;
+      };
+    
+      // Fermer la modale
+      const closeModalAction = () => {
+        modalModify.style.display = 'none';
+        currentTodoId = null; // Réinitialiser l'ID
+      };
+    
+      closeModal.addEventListener('click', closeModalAction);
+      modalCancel.addEventListener('click', closeModalAction);
+    
+      modalSaveModify.addEventListener('click', async (e) => {
+        e.preventDefault();
+    
+        const updatedTodo = {
+          text: todoTextInput.value,
+          checked: todoCheckedInput.checked,
+        };
+    
+        try {
+          // Appel API pour modifier le ToDo
+          const response = await fetch(`/api/todos/${currentTodoId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedTodo),
+          });
+    
+          if (response.ok) {
+            alert('ToDo modifié avec succès !');
+            location.reload(); // Recharger la page
+          } else {
+            const error = await response.json();
+            alert(`Erreur : ${error.message}`);
+          }
+        } catch (err) {
+          alert('Erreur lors de la modification du ToDo.');
+        }
+    
+        closeModalAction();
+      });
+    
+      window.addEventListener('click', (event) => {
+        if (event.target === modalModify) {
+          closeModalAction();
+        }
+      });
+    
+      const loadTodos = async function (todos) {
+        console.log(todos);
+    
+        todosContainer.innerHTML = ''
+        if (todos) {
+          todos.forEach(todo => {
+            const item = document.createElement('li')
+            item.className = `items ${todo.checked ? 'checked' : ''}`
+            item.dataset.id = todo.id // Stocker l'ID de la tâche
+            item.textContent = todo.text
+    
+            if (!todo.checked) {
+              const span = document.createElement('span')
+              const btnModify = document.createElement('button')
+              const btnDeleted = document.createElement('button')
+              
+              btnModify.textContent = 'Modify'
+              btnDeleted.textContent = 'Delete'
+    
+              btnModify.className = 'btn modify'
+              btnDeleted.className = 'btn deleted'
+    
+              span.appendChild(btnModify)
+              span.appendChild(btnDeleted)
+              item.appendChild(span)
+    
+              btnModify.addEventListener('click', () => modifyTodo(todo))
+              btnDeleted.addEventListener('click', () => deleteTodo(todo.id))
+            }
+            todosContainer.appendChild(item)
+          })
+        } else {
+          const item = document.createElement('li');
+          item.className = `items`;
+          item.textContent = 'Aucune donnée trouvée.';
+          todosContainer.appendChild(item);
+        }
+      }
+    
+    
+      const modifyTodo = async function (todo) {
+        openModifyModal(todo);
+      }
+    
+      const deleteTodo = async function (id) {
+        if (confirm('Voulez-vous vraiment supprimer cette tâche ?')) {
+          let url = `/api/remove/${id}`
+          window.location.href = url; // Redirige
+          // await fetch(`/api/todos/${id}`, { method: 'DELETE' })
+        }
+      }
+    
+      // Charger les tâches initiales
+      loadTodos(todos)
+    
+    });
+    
+    
+    function appendChildWithContent(parentElement, elementToAppend, textContent, listClass = []) {
+      let element = document.createElement(elementToAppend);
+      element.textContent = textContent;
+      if(listClass.length > 0){
+        listClass.forEach((item)=>{
+          element.classList.add = ' ' + item;
+        });
+      }
+      parentElement.appendChild(elementToAppend);
+    }

@@ -1,15 +1,34 @@
 <%- include('../partials/header') %>
+
     <div class="container mt-3">
-        <h1>List Todo</h1>
-        <ul id="todos">
-            <li class="items checked">Hit the gym</li>
-            <li class="checked items">Pay bills</li>
-            <li class="items">Meet George</li>
-            <li class="items">Buy eggs</li>
-            <li class="items">Read a book</li>
-            <li class="items">Organize office</li>
-        </ul>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script>
+        <div class="container mt-3">
+            <h1>Liste des ToDos</h1>
+            <ul id="todos">
+            </ul>
+        </div>
+    </div>
+
+    <!-- Injecter les données todos dans une variable globale -->
+    <script>
+        window.todos = <%- JSON.stringify(todos || []) %>;
+    </script>
+
+    <!-- Boîte modale pour modifier un ToDo -->
+    <div id="modalModify" class="modalModify" style="display: none;">
+        <div class="modal-content-modify">
+            <span class="close">&times;</span>
+            <h2 id="modal-title-modify">Modify ToDo</h2>
+            <form id="modal-form">
+                <label for="todo-text">Text:</label>
+                <input type="text" id="todo-tex-modify" name="text" required>
+                <br><br>
+                <label for="todo-checked">Completed:</label>
+                <input type="checkbox" id="todo-checked" name="checked">
+                <br><br>
+                <button type="button" id="modal-save-modify">Modify</button>
+                <button type="button" id="modal-cancel">Cancel</button>
+            </form>
+        </div>
     </div>
 
     <%- include('../partials/footer') %>
