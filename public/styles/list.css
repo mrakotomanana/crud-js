@@ -94,7 +94,7 @@ body {
 
 /* Styles de la boîte modale (comme précédemment) */
 
-.modalModify {
+.modalModify, .modalDelete  {
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -105,7 +105,7 @@ body {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content-modify {
+.modal-content-modify, .modal-content-delete {
     margin: 15% auto;
     padding: 20px;
     width: 50%;
@@ -113,8 +113,26 @@ body {
     border-radius: 10px;
 }
 
-.close {
+[id*=close] {
     float: right;
     font-size: 1.5rem;
     cursor: pointer;
+}
+
+[id*=todo-text]{
+    padding: 5px;
+}
+
+#todos li.items.no-data {
+    background-color: #888;
+    color: whitesmoke;
+}
+
+#todos li.items.no-data a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#todos li.items.no-data button:hover {
+    background-color: rgb(8, 7, 7);
 }

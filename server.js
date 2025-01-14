@@ -17,23 +17,19 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
-    res.locals.title = 'To Do List';
+    res.locals.title = 'To Do List';    
     res.locals.css = 'main';
+    res.locals.currentUrl = req.url; 
     next(); 
 });
 
 
 app.get('/', (req, res) => {
-    res.render('index', {title: 'Accueil ToDo',});
+    res.render('index', {title: 'Accueil ToDo'});
 });
 
 app.get('/add', (req, res) => {
     res.render('pages/add', {title: 'Ajouter des ToDo', css: 'add'});
-});
-
-app.get('/api/remove/:id', async function(req, res){
-    const { id } = req.params;
-    res.render('pages/delete', {title: 'Suppression des ToDo', css: 'delete', id});
 });
 
 app.get('/list', async (req, res) => {
@@ -86,12 +82,12 @@ app.delete('/api/todos/:id', async (req, res) => {
       const deletedTodo = await Todo.findByIdAndDelete(id);
   
       if (!deletedTodo) {
-        return res.status(404).json({ message: 'Tâche introuvable' });
+        return res.status(404).json({ message: 'Tâche introuvable.' });
       }
   
-      res.status(204).end();
+      res.status(204).json({ message: 'Tâche bien supprimée.' });
     } catch (err) {
-      res.status(500).json({ message: 'Erreur interne' });
+      res.status(500).json({ message: 'Erreur interne.' });
     }
   });
 

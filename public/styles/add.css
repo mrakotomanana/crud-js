@@ -1,3 +1,8 @@
-body {
-    background-color: aliceblue;
-}
+#mainContainer {
+    border-radius: 8px; 
+    background-color: #f8f9fa; 
+  }
+
+  #titleInput {
+    margin-bottom: 15px;
+  }

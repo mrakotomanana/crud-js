@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Page Add chargée avec succès !');
   const addBtn = document.getElementById('addBtn');
-  const inputField = document.getElementById('myInput');
+  const inputField = document.getElementById('titleInput');
 
   addBtn.addEventListener('click', function (e) {
     e.preventDefault();

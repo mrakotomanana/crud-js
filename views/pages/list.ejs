@@ -15,17 +15,17 @@
     <!-- box modal modify ToDo -->
     <div id="modalModify" class="modalModify" style="display: none;">
         <div class="modal-content-modify">
-            <span class="close">&times;</span>
+            <span id="close-modify">&times;</span>
             <h2 id="modal-title-modify">Modify ToDo</h2>
             <form id="modal-form">
-                <label for="todo-text">Text:</label>
+                <label for="todo-text">Text :: </label>
                 <input type="text" id="todo-text-modify" name="text" required>
                 <br><br>
-                <label for="todo-checked">Completed:</label>
+                <label for="todo-checked">Completed :: </label>
                 <input type="checkbox" id="todo-checked-modify" name="checked">
                 <br><br>
                 <button type="button" id="modal-save-modify">Modify</button>
-                <button type="button" id="modal-cancel">Cancel</button>
+                <button type="button" id="modal-cancel-modify">Cancel</button>
             </form>
         </div>
     </div>
@@ -33,16 +33,16 @@
     <!-- box modal delete ToDo -->
     <div id="modalDelete" class="modalDelete" style="display: none;">
         <div class="modal-content-delete">
-            <span class="close">&times;</span>
+            <span id="close-delete">&times;</span>
             <h2 id="modal-title-delete">Modify ToDo</h2>
             <form id="modal-form">
-                <label for="todo-text">Text:</label>
-                <input type="text" id="todo-text-delete" name="text" required>
+                <label for="todo-text">Text :: </label>
+                <input type="text" id="todo-text-delete" name="text" required disabled>
                 <br><br>
-                <label for="todo-checked">Completed:</label>
-                <input type="checkbox" id="todo-checked-delete" name="checked">
+                <label for="todo-checked">Completed ::</label>
+                <input type="checkbox" id="todo-checked-delete" name="checked" disabled>
                 <br><br>
-                <button type="button" id="modal-save-delete">Modify</button>
+                <button type="button" id="modal-save-delete">Delete</button>
                 <button type="button" id="modal-cancel-delete">Cancel</button>
             </form>
         </div>

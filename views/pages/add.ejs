@@ -1,11 +1,15 @@
 <%- include('../partials/header') %>
-    <div class="container mt-3">
-
-        <div id="myDIV" class="header">
-            <h2>Add ToDo</h2>
-            <input type="text" id="myInput" placeholder="Title...">
-            <button id="addBtn">Add</button>
+    <div class="container mt-5">
+        <div id="mainContainer" class="card shadow-sm p-4">
+            <h2 class="mb-4 text-center text-secondary">Ajouter une tâche</h2>
+            <div class="form-group">
+                <label for="titleInput" class="sr-only">Titre</label>
+                <input type="text" id="titleInput" class="form-control" placeholder="Entrez un titre pour votre tâche..."
+                    aria-label="Titre">
+            </div>
+            <div class="d-flex justify-content-center">
+                <button id="addBtn" class="btn btn-secondary btn-sm px-5">Ajouter</button>
+            </div>
         </div>
     </div>
-
     <%- include('../partials/footer') %>

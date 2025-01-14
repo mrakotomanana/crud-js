@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalSaveDelete = document.getElementById('modal-save-delete');
   const modalCancelDelete = document.getElementById('modal-cancel-delete');
 
-  const closeModal = document.querySelector('.close');
+  const closeModalModify = document.querySelector('#close-modify');
+  const closeModalDelete = document.querySelector('#close-delete');
 
   let currentTodoId = null;
 
@@ -42,20 +43,26 @@ document.addEventListener('DOMContentLoaded', () => {
     currentTodoId = null;
   };
 
-  closeModal.addEventListener('click', closeModalModifyAction);
+  const closeModalDeleteAction = () => {
+    modalDelete.style.display = 'none';
+    currentTodoId = null;
+  };
+
+  closeModalModify.addEventListener('click', closeModalModifyAction);
   modalCancelModify.addEventListener('click', closeModalModifyAction);
-  modalCancelDelete.addEventListener('click', closeModalModifyAction);
+  
+  closeModalDelete.addEventListener('click', closeModalDeleteAction);
+  modalCancelDelete.addEventListener('click', closeModalDeleteAction);
 
   modalSaveModify.addEventListener('click', async (e) => {
     e.preventDefault();
 
     const updatedTodo = {
-      text: todoTextInput.value,
-      checked: todoCheckedInput.checked,
+      text: todoTextInputModify.value,
+      checked: todoCheckedInputModify.checked,
     };
 
     try {
-      // Appel API pour modifier le ToDo
       const response = await fetch(`/api/todos/${currentTodoId}`, {
         method: 'PUT',
         headers: {
@@ -78,15 +85,37 @@ document.addEventListener('DOMContentLoaded', () => {
     closeModalModifyAction();
   });
 
+  modalSaveDelete.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`/api/todos/${currentTodoId}`, { method: 'DELETE' });
+
+      const result = await response.json();
+
+      alert(result.message);
+      location.reload();
+     
+    } catch (err) {
+      alert('Erreur lors de la suppression du ToDo.');
+    }
+
+    closeModalDelete();
+  });
+
   window.addEventListener('click', (event) => {
     if (event.target === modalModify) {
       closeModalModifyAction();
+    }
+    if (event.target === modalDelete) {
+      closeModalDeleteAction();
     }
   });
 
   const loadTodos = async function (todos) {
     todosContainer.innerHTML = '';
-    if (todos) {
+    console.log(todos.length);
+    if (todos && todos.length > 0) {
       todos.forEach(todo => {
         const item = document.createElement('li');
         item.className = `items ${todo.checked ? 'checked' : ''}`;
@@ -103,14 +132,14 @@ document.addEventListener('DOMContentLoaded', () => {
           item.appendChild(span);
 
           btnModify.addEventListener('click', () => modifyTodo(todo));
-          btnDeleted.addEventListener('click', () => deleteTodo(todo.id));
+          btnDeleted.addEventListener('click', () => deleteTodo(todo));
         }
         todosContainer.appendChild(item);
       })
     } else {
       const item = document.createElement('li');
-      item.className = `items`;
-      item.textContent = 'Aucune donnée trouvée.';
+      item.className = `items no-data`;
+      item.innerHTML = `Aucune donnée trouvée. <button><a href='/add'>Ajouter tâche</a></button>`;
       todosContainer.appendChild(item);
     }
   }
