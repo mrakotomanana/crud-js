@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/todos');
+// mongoose.connect('mongodb://127.0.0.1:27017/todos');
+mongoose.connect('mongodb+srv://rakotomanan:xGv5HtU0cok1IFQU@cluster0.wetth.mongodb.net/todos?retryWrites=true&w=majority');
 
 const db = mongoose.connection;
 

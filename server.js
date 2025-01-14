@@ -23,7 +23,6 @@ app.use((req, res, next) => {
     next(); 
 });
 
-
 app.get('/', (req, res) => {
     res.render('index', {title: 'Accueil ToDo'});
 });
@@ -77,7 +76,7 @@ app.post('/api/todos', async (req, res) => {
 
 app.delete('/api/todos/:id', async (req, res) => {
     const { id } = req.params;
-  
+
     try {
       const deletedTodo = await Todo.findByIdAndDelete(id);
   
