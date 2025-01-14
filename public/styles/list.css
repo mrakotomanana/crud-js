@@ -1,4 +1,6 @@
 * {
+    margin:0;
+    padding:0;
     box-sizing: border-box;
 }
 
@@ -13,11 +15,8 @@ body {
 
 #todos li.items {
     display: flex;
-    /* Active flexbox sur chaque <li> */
     align-items: center;
-    /* Centre verticalement le texte et le bouton */
     justify-content: space-between;
-    /* Espace entre le texte et le bouton */
     list-style-type: none;
     cursor: pointer;
     position: relative;
@@ -34,7 +33,6 @@ body {
 
 #todos li.items button {
     background-color: #4d4141;
-    /* Couleur rouge pour le bouton */
     color: white;
     border: none;
     border-radius: 4px;
@@ -42,7 +40,6 @@ body {
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
-    /* Animation au survol */
 }
 
 #todos li.items:nth-child(odd) {

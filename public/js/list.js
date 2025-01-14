@@ -5,10 +5,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const modalModify = document.getElementById('modalModify');
   const modalTitleModify = document.getElementById('modal-title-modify');
-  const todoTextInput = document.getElementById('todo-tex-modify');
-  const todoCheckedInput = document.getElementById('todo-checked');
+  const todoTextInputModify = document.getElementById('todo-text-modify');
+  const todoCheckedInputModify = document.getElementById('todo-checked-modify');
   const modalSaveModify = document.getElementById('modal-save-modify');
-  const modalCancel = document.getElementById('modal-cancel');
+  const modalCancelModify = document.getElementById('modal-cancel-modify');
+
+  const modalDelete = document.getElementById('modalDelete');
+  const modalTitleDelete = document.getElementById('modal-title-delete');
+  const todoTextInputDelete = document.getElementById('todo-text-delete');
+  const todoCheckedInputDelete = document.getElementById('todo-checked-delete');
+  const modalSaveDelete = document.getElementById('modal-save-delete');
+  const modalCancelDelete = document.getElementById('modal-cancel-delete');
+
   const closeModal = document.querySelector('.close');
 
   let currentTodoId = null;
@@ -17,18 +25,26 @@ document.addEventListener('DOMContentLoaded', () => {
     modalModify.style.display = 'block';
     modalTitleModify.textContent = 'Modify ToDo';
     currentTodoId = todo._id;
-    todoTextInput.value = todo.text;
-    todoCheckedInput.checked = todo.checked;
+    todoTextInputModify.value = todo.text;
+    todoCheckedInputModify.checked = todo.checked;
   };
 
-  // Fermer la modale
-  const closeModalAction = () => {
+  const openDeleteModal = (todo) => {
+    modalDelete.style.display = 'block';
+    modalTitleDelete.textContent = 'Delete ToDo';
+    currentTodoId = todo._id;
+    todoTextInputDelete.value = todo.text;
+    todoCheckedInputDelete.checked = todo.checked;
+  };
+
+  const closeModalModifyAction = () => {
     modalModify.style.display = 'none';
-    currentTodoId = null; // Réinitialiser l'ID
+    currentTodoId = null;
   };
 
-  closeModal.addEventListener('click', closeModalAction);
-  modalCancel.addEventListener('click', closeModalAction);
+  closeModal.addEventListener('click', closeModalModifyAction);
+  modalCancelModify.addEventListener('click', closeModalModifyAction);
+  modalCancelDelete.addEventListener('click', closeModalModifyAction);
 
   modalSaveModify.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -50,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (response.ok) {
         alert('ToDo modifié avec succès !');
-        location.reload(); // Recharger la page
+        location.reload();
       } else {
         const error = await response.json();
         alert(`Erreur : ${error.message}`);
@@ -59,37 +75,37 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Erreur lors de la modification du ToDo.');
     }
 
-    closeModalAction();
+    closeModalModifyAction();
   });
 
   window.addEventListener('click', (event) => {
     if (event.target === modalModify) {
-      closeModalAction();
+      closeModalModifyAction();
     }
   });
 
   const loadTodos = async function (todos) {
-    todosContainer.innerHTML = ''
+    todosContainer.innerHTML = '';
     if (todos) {
       todos.forEach(todo => {
-        const item = document.createElement('li')
-        item.className = `items ${todo.checked ? 'checked' : ''}`
-        item.dataset.id = todo.id // Stocker l'ID de la tâche
-        item.textContent = todo.text
+        const item = document.createElement('li');
+        item.className = `items ${todo.checked ? 'checked' : ''}`;
+        item.dataset.id = todo.id;
+        item.textContent = todo.text;
 
         if (!todo.checked) {
           const span = document.createElement('span');
           const btnModify = appendChildWithContent('button', 'Modify', ['btn', 'modify']);
           const btnDeleted = appendChildWithContent('button', 'Delete', ['btn', 'deleted']);
-          
-          span.appendChild(btnModify)
-          span.appendChild(btnDeleted)
+
+          span.appendChild(btnModify);
+          span.appendChild(btnDeleted);
           item.appendChild(span);
 
-          btnModify.addEventListener('click', () => modifyTodo(todo))
-          btnDeleted.addEventListener('click', () => deleteTodo(todo.id))
+          btnModify.addEventListener('click', () => modifyTodo(todo));
+          btnDeleted.addEventListener('click', () => deleteTodo(todo.id));
         }
-        todosContainer.appendChild(item)
+        todosContainer.appendChild(item);
       })
     } else {
       const item = document.createElement('li');
@@ -99,21 +115,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
-  const modifyTodo = async function (todo) {
-    openModifyModal(todo);
-  }
-
-  const deleteTodo = async function (id) {
-    if (confirm('Voulez-vous vraiment supprimer cette tâche ?')) {
-      let url = `/api/remove/${id}`
-      window.location.href = url; // Redirige
-      // await fetch(`/api/todos/${id}`, { method: 'DELETE' })
+  const modifyTodo = function (todo) {
+    if (confirm('Voulez-vous vraiment modifier cette tâche ?')) {
+      openModifyModal(todo);
     }
   }
 
-  // Charger les tâches initiales
-  loadTodos(todos)
+  const deleteTodo = function (todo) {
+    if (confirm('Voulez-vous vraiment supprimer cette tâche ?')) {
+      openDeleteModal(todo);
+    }
+  }
+
+  loadTodos(todos);
 
 });
 

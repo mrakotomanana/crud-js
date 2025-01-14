@@ -79,7 +79,6 @@ app.post('/api/todos', async (req, res) => {
     }
   });
 
-  // Supprimer une tâche
 app.delete('/api/todos/:id', async (req, res) => {
     const { id } = req.params;
   
