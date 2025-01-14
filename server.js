@@ -11,7 +11,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000;
-const ENV = process.env.NODE_ENV || 'Production';
+const ENV = process.env.NODE_ENV || 'development';
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -92,5 +92,5 @@ app.delete('/api/todos/:id', async (req, res) => {
 
 
 app.listen(PORT, () => {
-    console.log(`Server on http::/localhost:${PORT} en mode ${ENV}`);
+    console.log(`Server on ${PORT} en mode ${ENV}`);
 });
