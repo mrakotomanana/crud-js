@@ -124,8 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!todo.checked) {
           const span = document.createElement('span');
-          const btnModify = appendChildWithContent('button', 'Modify', ['btn', 'modify']);
-          const btnDeleted = appendChildWithContent('button', 'Delete', ['btn', 'deleted']);
+          const btnModify = appendChildWithContent('button', 'Modifier', ['btn', 'modify']);
+          const btnDeleted = appendChildWithContent('button', 'Supprimer', ['btn', 'deleted']);
 
           span.appendChild(btnModify);
           span.appendChild(btnDeleted);

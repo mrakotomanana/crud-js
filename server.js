@@ -45,6 +45,7 @@ app.put('/api/todos/:id', async (req, res) => {
         id,
         { text, checked },
         { new: true }
+
       );
   
       if (!updatedTodo) {
