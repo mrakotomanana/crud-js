@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const openModifyModal = (todo) => {
     modalModify.style.display = 'block';
-    modalTitleModify.textContent = 'Modify ToDo';
+    modalTitleModify.textContent = 'Modifier une tâche';
     currentTodoId = todo._id;
     todoTextInputModify.value = todo.text;
     todoCheckedInputModify.checked = todo.checked;
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const openDeleteModal = (todo) => {
     modalDelete.style.display = 'block';
-    modalTitleDelete.textContent = 'Delete ToDo';
+    modalTitleDelete.textContent = 'Supprimer une tâche';
     currentTodoId = todo._id;
     todoTextInputDelete.value = todo.text;
     todoCheckedInputDelete.checked = todo.checked;
@@ -72,14 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (response.ok) {
-        alert('ToDo modifié avec succès !');
+        alert('Tâche modifié avec succès !');
         location.reload();
       } else {
         const error = await response.json();
         alert(`Erreur : ${error.message}`);
       }
     } catch (err) {
-      alert('Erreur lors de la modification du ToDo.');
+      alert('Erreur lors de la modification de la tâche.');
     }
 
     closeModalModifyAction();
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       location.reload();
      
     } catch (err) {
-      alert('Erreur lors de la suppression du ToDo.');
+      alert('Erreur lors de la suppression de la tâche.');
     }
 
     closeModalDelete();
