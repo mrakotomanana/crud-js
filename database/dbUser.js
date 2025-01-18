@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 // mongoose.connect('mongodb+srv://rakotomanan:xGv5HtU0cok1IFQU@cluster0.wetth.mongodb.net/users?retryWrites=true&w=majority');
 
 // const db = mongoose.connection;
-const db = mongoose.createConnection('mongodb://localhost:27017/users', {
+const db = mongoose.createConnection('mongodb+srv://rakotomanan:xGv5HtU0cok1IFQU@cluster0.wetth.mongodb.net/users?retryWrites=true&w=majority', {
 });
 
 console.log('Connecté à MongoDB User');
