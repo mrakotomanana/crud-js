@@ -20,7 +20,7 @@
     <nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
         <a class="navbar-brand" href="/">
             <img src="../images/logo.png" alt="Logo" class="img-fluid d-inline-block align-text-top" style="max-width: 75px; height: auto;">
-          </a>
+        </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -38,7 +38,18 @@
                 <li class="nav-item <%= currentUrl === '/list' ? 'active' : '' %>">
                     <a class="nav-link" href="./list">Listes</a>
                 </li>
-            
+                <% if (isAuthenticated) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Se déconnecter</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">Connecté en tant que <%= user.username %></span>
+                    </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Se connecter</a>
+                        </li>
+                        <% } %>
             </ul>
         </div>
 

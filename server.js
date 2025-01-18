@@ -8,8 +8,10 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const bcrypt = require('bcrypt');
 // const maskdata = require('maskdata');
 // const rateLimit = require('express-rate-limit');
+const User = require('./models/User');
 
 const app = express();
 
@@ -30,6 +32,14 @@ const dataSecret = process.env.SESSION_SECRET || crypto.randomBytes(32).toString
 // 	console.log(`${date}: ${method} ${url}`);
 // 	next();
 // }
+
+function isAuthenticated(req, res, next) {
+  if (req.session && req.session.user) {
+      return next();
+  } else {
+      return res.redirect('/login');
+  }
+}
 
 
 app.use(bodyParser.json());
@@ -66,20 +76,74 @@ app.use((req, res, next) => {
     res.locals.title = 'To Do List';    
     res.locals.css = 'main';
     res.locals.currentUrl = req.url; 
+    res.locals.error = null; 
+    res.locals.isAuthenticated = req.session && req.session.user;
+    res.locals.user = req.session ? req.session.user : null; 
     // res.locals.nonce = crypto.randomBytes(16).toString('base64'); // Génère un nonce aléatoire
     // res.setHeader('Content-Security-Policy', `script-src 'self' 'nonce-${res.locals.nonce}'`);
     next();
 });
 
-app.get('/', (req, res) => {
+app.get('/', isAuthenticated, (req, res) => {
     res.render('index', {title: 'Accueil'});
 });
 
-app.get('/add', (req, res) => {
+app.get('/login', (req, res) => {
+  if (req.session.user) {
+      return res.redirect('/');
+      
+  }
+  res.render('pages/login');
+
+});
+
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    console.log("123");
+    
+   
+    console.log("456");
+    let user = await User.findOne({ username });
+    console.log("789");
+
+      if (!user) {
+          const hashedPassword = await bcrypt.hash(password, 10);
+          user = new User({ username, password: hashedPassword });
+          await user.save();
+          console.log('Nouvel utilisateur enregistré :', username);
+      } else {
+          const isMatch = await bcrypt.compare(password, user.password);
+          if (!isMatch) {
+              return res.render('pages/login', { error: 'Mot de passe incorrect' });
+          }
+      }
+
+      req.session.user = { id: user._id, username: user.username };
+      return res.redirect('/'); 
+
+  } catch (err) {
+      console.error('Erreur lors de la connexion/inscription :', err);
+      res.render('pages/login', { error: 'Une erreur est survenue. Veuillez réessayer.' });
+  }
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+      if (err) {
+          console.error(err);
+      }
+      res.redirect('/login');
+  });
+});
+
+
+app.get('/add', isAuthenticated, (req, res) => {
     res.render('pages/add', {title: 'Ajouter une tâche', css: 'add'});
 });
 
-app.get('/list', async (req, res) => {
+app.get('/list', isAuthenticated, async (req, res) => {
     const todos = await Todo.find();
     res.render('pages/list', {title: 'Liste des Tâches', css: 'list', todos});
 });
