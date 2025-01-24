@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
 
     const todoText = inputField.value.trim();
-    if (!todoText) {
+    if (!todoText ) {
       alert('Veuillez entrer un titre pour le ToDo.');
     } else {
       if (confirm('Voulez-vous vraiment ajouter cette tâche ?')) {
@@ -17,11 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ text: todoText }),
         }).then((response) => {
           if (response.ok) {
-            window.location.href = '/list'; // Redirige vers la liste des ToDos
+            window.location.href = '/list'; 
           } else {
+            inputField.value = '';
+            window.alert('Erreur lors de l\'ajout d\'une Tâche');
             console.error('Erreur lors de l\'ajout du ToDo');
           }
         }).catch((error) => {
+          inputField.value = '';
+          window.alert('Erreur lors de l\'ajout d\'une Tâche');
           console.error('Erreur réseau :', error);
         });
       }

@@ -9,7 +9,7 @@
     </div>
 
     <!-- <script nonce="<%= //nonce %>"> -->
-    <script >
+    <script>
         window.todos = <%- JSON.stringify(todos || []) %>;
     </script>
 
@@ -21,6 +21,9 @@
             <form id="modal-form">
                 <label for="todo-text">Tâche </label>
                 <input type="text" id="todo-text-modify" name="text" required>
+                <br><br>
+                <label for="todo-username">Username </label>
+                <input type="text" id="todo-text-username" name="text" required disabled>
                 <br><br>
                 <label for="todo-checked">Terminée </label>
                 <input type="checkbox" id="todo-checked-modify" name="checked">
@@ -39,6 +42,9 @@
             <form id="modal-form">
                 <label for="todo-text">Tâche </label>
                 <input type="text" id="todo-text-delete" name="text" required disabled>
+                <br><br>
+                <label for="todo-username-delete">Username </label>
+                <input type="text" id="todo-text-username-delete" name="text" required disabled>
                 <br><br>
                 <label for="todo-checked">Terminée </label>
                 <input type="checkbox" id="todo-checked-delete" name="checked" disabled>

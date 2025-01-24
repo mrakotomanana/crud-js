@@ -10,6 +10,7 @@
 
     <link rel="icon" type="image/x-icon" href="../images/logo.png">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <link rel="stylesheet" href="../styles/bootstrap.min.css">
     <link rel="stylesheet" href="../styles/<%= css %>.css">
@@ -38,12 +39,17 @@
                 <li class="nav-item <%= currentUrl === '/list' ? 'active' : '' %>">
                     <a class="nav-link" href="./list">Listes</a>
                 </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
                 <% if (isAuthenticated) { %>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Se déconnecter</a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-link">Connecté en tant que <%= user.username %></span>
+                        <span class="nav-link d-flex align-items-center">
+                            <i class="fas fa-user-circle mr-2"></i>
+                            <%= user.username %>
+                        </span>
                     </li>
                     <% } else { %>
                         <li class="nav-item">

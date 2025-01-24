@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalModify = document.getElementById('modalModify');
   const modalTitleModify = document.getElementById('modal-title-modify');
   const todoTextInputModify = document.getElementById('todo-text-modify');
+  const todoTextUsernameModify = document.getElementById('todo-text-username');
   const todoCheckedInputModify = document.getElementById('todo-checked-modify');
   const modalSaveModify = document.getElementById('modal-save-modify');
   const modalCancelModify = document.getElementById('modal-cancel-modify');
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalDelete = document.getElementById('modalDelete');
   const modalTitleDelete = document.getElementById('modal-title-delete');
   const todoTextInputDelete = document.getElementById('todo-text-delete');
+  const todoTextUsernameDelete = document.getElementById('todo-text-username-delete');
   const todoCheckedInputDelete = document.getElementById('todo-checked-delete');
   const modalSaveDelete = document.getElementById('modal-save-delete');
   const modalCancelDelete = document.getElementById('modal-cancel-delete');
@@ -27,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalTitleModify.textContent = 'Modifier une tâche';
     currentTodoId = todo._id;
     todoTextInputModify.value = todo.text;
+    todoTextUsernameModify.value = todo.username;
     todoCheckedInputModify.checked = todo.checked;
   };
 
@@ -35,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalTitleDelete.textContent = 'Supprimer une tâche';
     currentTodoId = todo._id;
     todoTextInputDelete.value = todo.text;
+    todoTextUsernameDelete.value = todo.username;
     todoCheckedInputDelete.checked = todo.checked;
   };
 
@@ -90,17 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const response = await fetch(`/api/todos/${currentTodoId}`, { method: 'DELETE' });
-
-      const result = await response.json();
-
-      alert(result.message);
-      location.reload();
-     
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message);        
+        location.reload();
+        closeModalDeleteAction();
+      }else{
+        alert(`Erreur : ${error.message}`);
+        closeModalDeleteAction();
+      }
     } catch (err) {
       alert('Erreur lors de la suppression de la tâche.');
+      closeModalDeleteAction();
     }
-
-    closeModalDelete();
   });
 
   window.addEventListener('click', (event) => {
