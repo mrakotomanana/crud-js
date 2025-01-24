@@ -181,8 +181,9 @@ app.get('/logout', (req, res) => {
 });
 
 
-app.get('/add', isAuthenticated, (req, res) => {
-  res.render('pages/add', { title: 'Ajouter une tâche', css: 'add' });
+app.get('/add', isAuthenticated, async (req, res) => {
+  const todos = await Todo.find({ username: req.session.user.username, password: req.session.user.password });
+  res.render('pages/add', { title: 'Ajouter une tâche', css: 'add', todos });
 });
 
 app.get('/list', isAuthenticated, async (req, res) => {

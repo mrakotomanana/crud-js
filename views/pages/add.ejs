@@ -1,11 +1,7 @@
 <%- include('../partials/header') %>
     <div class="container mt-5">
-        <div class="row">
-            <div class="col-xs-4">
-                
-            </div>
-        
-            <div class="col-xs-8">
+        <div class="row">     
+            <div class="col-sm-8">
                 <div id="mainContainer" class="card shadow-sm p-4">
                     <h2 class="mb-4 text-center text-secondary">Ajouter une tâche</h2>
                     <div class="form-group">
@@ -17,6 +13,22 @@
                         <button id="addBtn" class="btn btn-secondary btn-sm px-5">Ajouter</button>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-sm-4">
+                <% if (todos.length > 0) { %>
+                    <ul class="list-group">
+                        <% todos.forEach(todo => { %>
+                            <li class="list-group-item <%= todo.checked ? 'checked' : '' %> disabled" aria-disabled="true">
+                                <%= todo.text %>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <% } else { %>
+                        <p>
+                            Aucune Tâche trouvée. Ajoutez-en un pour commencer !
+                        </p>
+                        <% } %>
             </div>
         
         </div>
