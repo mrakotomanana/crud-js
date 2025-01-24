@@ -9,6 +9,8 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const bcrypt = require('bcrypt');
+const { body, validationResult } = require('express-validator');
+
 // const maskdata = require('maskdata');
 // const rateLimit = require('express-rate-limit');
 const User = require('./models/User');
@@ -93,19 +95,27 @@ app.get('/login', (req, res) => {
   if (req.session.user && req.session.isConnected) {
     return res.redirect('/');
   }
-  res.locals.currentUrl= "/";
+  res.locals.currentUrl = "/";
   res.render('pages/login');
 
 });
 
 app.get('/register', (req, res) => {
-  res.locals.currentUrl= "/";
+  res.locals.currentUrl = "/";
   res.render('pages/register');
 });
 
-app.post('/register', async (req, res) => {
-  const { username, password, email } = req.body;
+app.post('/register', [
+  body('password').custom((password) => validationPass(password)),
+  body('username')
+    .isLength({ max: 20 })
+    .withMessage('Le nom d\'utilisateur ne doit pas dépasser 20 caractères.'),
+  body('email')
+    .isEmail()
+    .withMessage('Veuillez entrer une adresse email valide.')
+], async (req, res) => {
 
+  const { username, password, email } = req.body;
   try {
     let user = await User.findOne({ username });
     if (user) {
@@ -114,11 +124,18 @@ app.post('/register', async (req, res) => {
         req.session.isConnected = false;
         return res.render('pages/register', { error: 'Utilisateur déjà utilisé.' });
       }
+
       isMatch = email === user.email;
       if (isMatch) {
         req.session.isConnected = false;
         return res.render('pages/register', { error: 'Email déjà utilisé.' });
       }
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      req.session.isConnected = false;
+      const errorMessages = errors.array().map((error) => error.msg);
+      return res.render('pages/register', { error: errorMessages });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     user = new User({ username, password: hashedPassword, email });
@@ -135,6 +152,16 @@ app.post('/register', async (req, res) => {
 
 });
 
+const validationPass = (password) => {
+  const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  if (!regex.test(password)) {
+    throw new Error(
+      'Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial. ' + ' - ' + password
+    );
+  }
+  return true;
+};
+
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -146,7 +173,7 @@ app.post('/login', async (req, res) => {
       // await user.save();
       // console.log('Nouvel utilisateur enregistré :', username);
       console.log(user);
-      
+
       let isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         req.session.isConnected = false;
@@ -182,6 +209,8 @@ app.get('/logout', (req, res) => {
 
 
 app.get('/add', isAuthenticated, async (req, res) => {
+  console.log("eto ndrai");
+
   const todos = await Todo.find({ username: req.session.user.username, password: req.session.user.password });
   res.render('pages/add', { title: 'Ajouter une tâche', css: 'add', todos });
 });
@@ -215,38 +244,46 @@ app.put('/api/todos/:id', async (req, res) => {
 });
 
 
-app.post('/api/todos', async (req, res) => {
-  const { text } = req.body;
-  const username = req.session.user.username;
+app.post('/api/todos',
+  body('text')
+    .isLength({ max: 20 })
+    .withMessage('Le text ne doit pas dépasser 20 caractères.'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      let msg = errors.array().map((error) => error.msg);
+      res.locals.error = msg;
+      return res.status(400).json({ message: msg });
+    }
 
-  if (!text) {
-    return res.status(400).json({ message: 'Le texte est requis' });
-  }
+    const { text } = req.body;
+    const username = req.session.user.username;
 
-  try {
-    const newTodo = new Todo({ text, username });
-    await newTodo.save();
-    res.status(201).json(newTodo);
-  } catch (err) {
-    res.status(500).json({ message: 'Erreur interne' });
-  }
-});
+    if (!text) {
+      return res.status(400).json({ message: 'Le texte est requis' });
+    }
+
+    try {
+      const newTodo = new Todo({ text, username });
+      await newTodo.save();
+      res.status(201).json(newTodo);
+    } catch (err) {
+      res.status(500).json({ message: 'Erreur interne' });
+    }
+  });
 
 app.delete('/api/todos/:id', async (req, res) => {
   const { id } = req.params;
   let username = req.session.user.username;
-  console.log(id);
-  console.log(username);
-
 
   try {
     const deletedTodo = await Todo.findOne({ _id: id, username: username });
-    console.log(deletedTodo);
-    
+
     if (!deletedTodo) {
       return res.status(404).json({ message: 'Tâche non trouvée ou utilisateur non autorisé.' });
     }
-    res.status(204).json({ message: 'Tâche bien supprimée.' });
+    await Todo.deleteOne({ _id: deletedTodo._id });
+    res.status(204).end();
   } catch (err) {
     res.status(500).json({ message: 'Erreur interne.' });
   }

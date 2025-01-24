@@ -95,16 +95,15 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const response = await fetch(`/api/todos/${currentTodoId}`, { method: 'DELETE' });
       if (response.ok) {
-        const result = await response.json();
-        alert(result.message);        
-        location.reload();
+        alert("Tâche bien supprimée.");        
         closeModalDeleteAction();
+        location.reload();
       }else{
-        alert(`Erreur : ${error.message}`);
+        alert('Erreur lors de la suppression de la tâche.');
         closeModalDeleteAction();
       }
     } catch (err) {
-      alert('Erreur lors de la suppression de la tâche.');
+      alert(`Erreur : ${error.message}`);
       closeModalDeleteAction();
     }
   });
