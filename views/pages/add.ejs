@@ -2,11 +2,15 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md col-lg-4 col-xl-6 mt-2">
-                <div id="mainContainer" class="card shadow-sm p-4 mx-auto" style="max-width: 600px;">
-                    <h4 class="mb-4 text-center text-secondary  ">Ajouter une tâche</h4>
+                <div id="mainContainer" class="card shadow-sm p-4 mx-auto" style="max-width: 600px">
+                    <h4 class="mb-4 text-center text-secondary">Ajouter une tâche</h4>
                     <div class="form-group">
                         <label for="titleInput" class="sr-only">Titre</label>
-                        <input type="text" id="titleInput" class="form-control form-control-lg" placeholder="Entrez un titre pour votre tâche..." aria-label="Titre">
+                        <input type="text" id="titleInput" class="form-control form-control-lg" placeholder="Votre tâche en 50 caractères maximum." />
+                    </div>
+                    <div class="form-group">
+                        <label for="dueDate" class="sr-only">Date fin</label>
+                        <input type="date" id="dueDate" class="form-control form-control-lg" name="dueDate" />
                     </div>
                     <div class="d-flex justify-content-center">
                         <button id="addBtn" class="btn btn-secondary btn-sm px-5">
@@ -19,27 +23,16 @@
                         <%= error %>
                     </div>
                     <% } %>
-
             </div>
 
             <div class="col-md col-lg-8 col-xl-6 mt-2">
-                <% if (todos.length > 0) { %>
-                    <ul class="list-group">
-                        <% todos.forEach(todo => { %>
-                            <li class="list-group-item d-flex justify-content-between align-items-center <%= todo.checked ? 'checked' : '' %> disabled" aria-disabled="true">
-                                <span class="text-left"><%= todo.text %></span>
-                                <span>Terminer :: <%= todo.checked ? 'Oui' : 'Non' %></span>
-                            </li>
-                            <% }) %>
-                    </ul>
-                    <% } else { %>
-                        <p>
-                            Aucune Tâche trouvée. Ajoutez-en un pour commencer !
-                        </p>
-                        <% } %>
+                <h2>Liste des tâches</h2>
+                <ul id="todoList" class="list-group mb-3"></ul>
+
+                <nav>
+                    <ul class="pagination justify-content-center" id="pagination"></ul>
+                </nav>
             </div>
-
         </div>
-
     </div>
     <%- include('../partials/footer') %>

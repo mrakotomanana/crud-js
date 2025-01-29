@@ -487,3 +487,258 @@ exports.getIndex = (req, res, next) => {
         console.log(err);
     });
 }
+
+
+<div id="modalModify" class="modalModify" style="display: none;">
+        <div class="modal-content-modify table-responsive-sm">
+            <span id="close-modify">&times;</span>
+            <h2 id="modal-title-modify">Modifier une tache</h2>
+            <table class="table table-sm">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Tâche</th>
+                        <th>Username</th>
+                        <th>Terminée</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> <input type="text" id="todo-text-modify" name="text" required></td>
+                        <td> <input type="text" id="todo-text-username" name="text" required disabled></td>
+                        <td> <input type="checkbox" id="todo-checked-modify" name="checked"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"> <button type="button" id="modal-save-modify" class="btn btn-info">Modifier</button> </td>
+                        <td> <button type="button" id="modal-cancel-modify" class="btn btn-secondary">Annuler</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="modalModify" id="modalModify" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Modifier une tache</h4>
+                </div>
+
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Tâche</span>
+                            <input type="text" id="todo-text-modify" name="text" required>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Username</span>
+                            <input type="text" id="todo-text-username" name="text" required disabled>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Terminée</span>
+                            <input type="checkbox" id="todo-checked-modify" name="checked">
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer d-flex justify-content-between align-items-center">
+                    <button type="button" id="modal-save-modify" class="btn btn-info">Modifier</button>
+                    <button type="button" id="modal-cancel-modify" class="btn btn-secondary">Annuler</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <% if (todos.length > 0) { %>
+                    <div class="table-responsive-sm">
+                        <table class="table table-hover table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Tâches</th>
+                                    <th>Date de fin</th>
+                                    <th>Terminer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% todos.forEach(todo => { %>
+                                    <tr>
+                                        <td>
+                                            <%= todo.text %>
+                                        </td>
+                                        <td>
+                                            <%= todo.dueDate ? new Date(todo.dueDate).toLocaleDateString() : 'Non définie' %>
+                                        </td>
+                                        <td class="text-right">
+                                            <input type="checkbox" <%=todo.checked ? 'checked' : '' %> disabled class="form-check-input"/>
+                                        </td>
+                                    </tr>
+
+                                    <% }) %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td>Aucune Tâche trouvée. Ajoutez-en un pour commencer !</td>
+                                            </tr>
+                                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const searchForm = document.getElementById('searchForm');
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  const pagination = document.getElementById('pagination');
+
+  function loadSearchResults(query, page = 1) {
+    fetch(`/api/search?q=${encodeURIComponent(query)}&page=${page}`)
+      .then(res => res.json())
+      .then(({ todos, totalPages, currentPage }) => {
+        searchResults.innerHTML = '';
+        pagination.innerHTML = '';
+
+        if (todos.length === 0) {
+          searchResults.innerHTML = '<li class="list-group-item text-muted">Aucun résultat trouvé</li>';
+          return;
+        }
+
+        // Affichage des résultats
+        todos.forEach(todo => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item d-flex justify-content-between align-items-center';
+          li.innerHTML = `
+            <span>${todo.text} <small class="text-muted">(${todo.dueDate ? new Date(todo.dueDate).toLocaleDateString() : 'Sans date'})</small></span>
+            <button class="btn btn-danger btn-sm" onclick="deleteTodo('${todo._id}')">🗑</button>
+          `;
+          searchResults.appendChild(li);
+        });
+
+        // Ajout de la pagination
+        for (let i = 1; i <= totalPages; i++) {
+          const li = document.createElement('li');
+          li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+          li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+          li.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadSearchResults(query, i);
+          });
+          pagination.appendChild(li);
+        }
+      })
+      .catch(err => console.error('Erreur de chargement des résultats:', err));
+  }
+
+  // Intercepter la soumission du formulaire
+  searchForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const query = searchInput.value.trim();
+    if (query) {
+      loadSearchResults(query);
+    }
+  });
+
+  // Charger les résultats initiaux si une recherche est déjà dans l'URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialQuery = urlParams.get('q');
+  if (initialQuery) {
+    searchInput.value = initialQuery;
+    loadSearchResults(initialQuery);
+  }
+});
+</script>
+
+
+
+<%- include('../partials/header') %>
+
+    <div class="container mt-4">
+        <h2>Résultats de la recherche : "
+            <%= searchQuery %>"</h2>
+
+        <ul class="list-group" id="searchResults"></ul>
+
+        <nav>
+            <ul class="pagination mt-3" id="pagination"></ul>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchResults = document.getElementById('searchResults');
+            const pagination = document.getElementById('pagination');
+
+            function loadSearchResults(page = 1) {
+                const urlParams = new URLSearchParams(window.location.search);
+                console.log(window.location);
+                const searchQuery = urlParams.get('q') || "";
+
+                fetch(`/api/search?q=${searchQuery}&page=${page}`)
+                    .then(res => res.json())
+                    .then(({
+                        todos,
+                        totalPages,
+                        currentPage
+                    }) => {
+                        searchResults.innerHTML = '';
+                        pagination.innerHTML = '';
+
+                        if (todos.length === 0) {
+                            searchResults.innerHTML = '<li class="list-group-item text-muted">Aucun résultat trouvé</li>';
+                            return;
+                        }
+
+                        todos.forEach(todo => {
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                            li.innerHTML = `
+                                <span>${todo.text} <small class="text-muted">(${todo.dueDate ? new Date(todo.dueDate).toLocaleDateString() : 'Non definie'})</small>
+                                <small class="text-muted">(${todo.checked ? 'terminé' : 'en cours'})</small></span>
+                            `;
+                            searchResults.appendChild(li);
+                        });
+
+                        for (let i = 1; i <= totalPages; i++) {
+                            const li = document.createElement('li');
+                            li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                            li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                            li.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                loadSearchResults(i);
+                            });
+                            pagination.appendChild(li);
+                        }
+                    })
+                    .catch(err => console.error('Erreur de chargement des résultats:', err));
+            }
+
+            loadSearchResults();
+        });
+    </script>
+
+
+<ul class="pagination pagination-sm">
+<% if (currentPage> 1) { %>
+    <li class="page-item"> <a href="/list?page=<%= currentPage - 1 %>" class="page-link btn btn-secondary">Précédent</a></li>
+    <% } %>
+        <% 
+            var nbPageView = currentPage + 1;
+            var initialViewPage = currentPage;
+            if(nbPageView > totalPages){
+                nbPageView = totalPages
+                initialViewPage = totalPages - 2;
+            }
+        %>
+            <% for (let i=initialViewPage; i <=nbPageView; i++) { %>
+                <li>
+                    <a href="/list?page=<%= i %>" class="page-link btn <%= currentPage == i ? 'btn-primary' : 'btn-light' %>">
+                        <%= i + '-' + initialViewPage  + '-' + currentPage %>
+                    </a>
+                </li>
+                <% } %>
+
+                    <% if (currentPage < totalPages) { %>
+                        <li><a href="/list?page=<%= currentPage + 1 %>" class="page-link btn btn-secondary">Suivant</a></li>
+                        <% } %>
+</ul>

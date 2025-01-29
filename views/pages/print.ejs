@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Liste des Tâches</h2>
+
+        <div class="text-right">
+            <a href="/download/pdf" class="btn btn-info">
+                <i class="fas fa-file-pdf"></i> Télécharger PDF
+            </a>
+        </div>
+
+        <ul id="todoList" class="list-group mb-3"></ul>
+
+        <nav>
+            <ul class="pagination justify-content-center" id="pagination"></ul>
+        </nav>
+    </div>
+
+    <%- include('../partials/footer') %>

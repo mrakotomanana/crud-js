@@ -1,57 +1,93 @@
 <%- include('../partials/header') %>
-
-    <div class="container mt-3">
-        <div class="container mt-3">
-            <h1>Liste des Tâches</h1>
-            <ul id="todos">
-            </ul>
-        </div>
-    </div>
-
-    <!-- <script nonce="<%= //nonce %>"> -->
     <script>
         window.todos = <%- JSON.stringify(todos || []) %>;
+        window.currentPage = <%- currentPage || 1 %>;
+        window.totalPages = <%- totalPages || 0 %>;
     </script>
 
+    <div class="container mt-3">
+
+        <h1>Liste des Tâches</h1>
+        <ul id="todos">
+        </ul>
+        <hr>
+        <ul class="pagination pagination-sm" id="pagination">
+
+        </ul>
+
+    </div>
+
     <!-- box modal modify ToDo -->
-    <div id="modalModify" class="modalModify" style="display: none;">
-        <div class="modal-content-modify">
-            <span id="close-modify">&times;</span>
-            <h2 id="modal-title-modify">Modifier une tache</h2>
-            <form id="modal-form">
-                <label for="todo-text">Tâche </label>
-                <input type="text" id="todo-text-modify" name="text" required>
-                <br><br>
-                <label for="todo-username">Username </label>
-                <input type="text" id="todo-text-username" name="text" required disabled>
-                <br><br>
-                <label for="todo-checked">Terminée </label>
-                <input type="checkbox" id="todo-checked-modify" name="checked">
-                <br><br>
-                <button type="button" id="modal-save-modify">Modifier</button>
-                <button type="button" id="modal-cancel-modify">Annuler</button>
-            </form>
+    <div class="modalModify" id="modalModify" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Modifier une tache</h4>
+                </div>
+
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Tâche</span>
+                            <input type="text" id="todo-text-modify" name="todo-text-modify" required>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Username</span>
+                            <input type="text" id="todo-text-username-modify" name="todo-text-username-modify" required disabled>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Date Fin</span>
+                            <input type="date" id="todo-text-date-modify" name="todo-text-date-modify" required>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Terminée</span>
+                            <input type="checkbox" id="todo-checked-modify" name="todo-checked-modify">
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-between align-items-center">
+                    <button type="button" id="modal-save-modify" class="btn btn-info">Modifier</button>
+                    <button type="button" id="modal-cancel-modify" class="btn btn-secondary">Annuler</button>
+                </div>
+
+
+            </div>
         </div>
     </div>
+    <!--- end -->
+
+
+
 
     <!-- box modal delete ToDo -->
     <div id="modalDelete" class="modalDelete" style="display: none;">
-        <div class="modal-content-delete">
+        <div class="modal-content-delete table-responsive-sm">
             <span id="close-delete">&times;</span>
             <h2 id="modal-title-delete">Supprimer une tâche</h2>
-            <form id="modal-form">
-                <label for="todo-text">Tâche </label>
-                <input type="text" id="todo-text-delete" name="text" required disabled>
-                <br><br>
-                <label for="todo-username-delete">Username </label>
-                <input type="text" id="todo-text-username-delete" name="text" required disabled>
-                <br><br>
-                <label for="todo-checked">Terminée </label>
-                <input type="checkbox" id="todo-checked-delete" name="checked" disabled>
-                <br><br>
-                <button type="button" id="modal-save-delete">Supprimer</button>
-                <button type="button" id="modal-cancel-delete">Annuler</button>
-            </form>
+            <table class="table table-sm">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Tâche</th>
+                        <th>Username</th>
+                        <th>Terminée</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> <input type="text" id="todo-text-delete" name="text" required disabled/></td>
+                        <td> <input type="text" id="todo-text-username-delete" name="text" required disabled/></td>
+                        <td> <input type="checkbox" id="todo-checked-delete" name="checked" disabled/></td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2"><button type="button" id="modal-save-delete" class="btn btn-danger">Supprimer</button></td>
+                        <td><button type="button" id="modal-cancel-delete" class="btn btn-secondary">Annuler</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

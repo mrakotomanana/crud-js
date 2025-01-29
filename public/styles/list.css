@@ -1,6 +1,6 @@
 * {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -91,10 +91,8 @@ body {
     color: rgb(255, 255, 249);
 }
 
-
-/* Styles de la boîte modale (comme précédemment) */
-
-.modalModify, .modalDelete  {
+.modalModify,
+.modalDelete {
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -105,7 +103,8 @@ body {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content-modify, .modal-content-delete {
+.modal-content-modify,
+.modal-content-delete {
     margin: 15% auto;
     padding: 20px;
     width: 50%;
@@ -119,7 +118,7 @@ body {
     cursor: pointer;
 }
 
-[id*=todo-text]{
+[id*=todo-text] {
     padding: 5px;
 }
 
