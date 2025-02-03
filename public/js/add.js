@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const todoText = inputField.value.trim();
     const dueDateText = dueDate.value;
     const dateDone = !dueDateText ? new Date().toISOString().split('T')[0] : new Date(dueDateText);
-  
     if (!todoText ) {
       alert('Veuillez entrer un titre pour le ToDo.');
     } else {
@@ -35,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }).catch((error) => {
           inputField.value = '';
-          window.alert('Erreur inconnue lors de l\'ajout d\'une Tâche');
-          console.error('Erreur inconnue lors de l\'ajout d\'une Tâche');
+          window.alert('Erreur lors de l\'ajout d\'une Tâche : ', error);
+          console.error('Erreur inconnue lors de l\'ajout d\'une Tâche', error);
         });
       }
     }

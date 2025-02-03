@@ -742,3 +742,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         <li><a href="/list?page=<%= currentPage + 1 %>" class="page-link btn btn-secondary">Suivant</a></li>
                         <% } %>
 </ul>
+
+
+tojo
+Tojo0123$
+
+Test0123
+Test0123$
+
+package 
+	joy @validation input

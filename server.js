@@ -126,7 +126,12 @@ app.post('/register', [
     .withMessage('Veuillez entrer une adresse email valide.')
 ], async (req, res) => {
 
-  const { username, password, email } = req.body;
+  const { username, password, email, passconfirm } = req.body;
+  let isNotConfirm = passconfirm != password;
+  if (isNotConfirm) {
+    req.session.isConnected = false;
+    return res.render('pages/register', { error: 'Mot de passe non confirmé.' });
+  }
   try {
     let user = await User.findOne({ username });
     if (user) {
@@ -303,6 +308,8 @@ app.get('/api/todos', isAuthenticated, async (req, res) => {
 app.get('/api/search', isAuthenticated, async (req, res) => {
   try {
     const query = req.query.q?.trim();
+    console.log(query);
+    
     if (!query) {
       return res.status(400).json({ error: 'Veuillez entrer un terme de recherche.' });
     }
@@ -347,7 +354,7 @@ app.put('/api/todos/:id', async (req, res) => {
 });
 
 
-app.post('/api/todos',
+app.post('/api/todos', isAuthenticated, 
   [
     body('text')
       .trim()
@@ -387,7 +394,9 @@ app.post('/api/todos',
     }
 
     try {      
-      const newTodo = new Todo({ text, username, dueDate: dueDate ? new Date(dueDate) : new Date() });
+      let finalDueDate = dueDate ? new Date(dueDate).toISOString() : Date.now;
+      const newTodo = new Todo({ text, username, dueDate: finalDueDate });
+      console.info(newTodo)
       await newTodo.save();
       res.status(201).json(newTodo);
     } catch (err) {

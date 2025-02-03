@@ -3,9 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const pagination = document.getElementById('pagination');
 
     function loadSearchResults(page = 1) {
+      debugger;
         const urlParams = new URLSearchParams(window.location.search);
         const searchQuery = urlParams.get('q') || "";
-
+        console.log(urlParams, searchQuery)
         fetch(`/api/search?q=${searchQuery}&page=${page}`)
             .then(res => res.json())
             .then(({
